@@ -7,6 +7,7 @@ import { Week } from "@/components/week";
 export default function Home() {
   return (
     <SafeAreaView className="flex-1">
+      <NoiseBackground />
       <Week />
     </SafeAreaView>
   );

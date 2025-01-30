@@ -1,25 +1,32 @@
-import { View, Text } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
 import React from "react";
 import { localFormatter, weekDayFormatter, weekDays } from "@/utils/constant";
 import dayjs from "dayjs";
 import Todos from "./todos";
+import { Accordion } from "@animatereactnative/accordion";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Day({ day }: { day: string }) {
+  const { height } = useWindowDimensions();
+  const { top, bottom } = useSafeAreaInsets();
+
   return (
-    <View
-      className="gap-2 p-4 pl-12 border-t-2 border-black/10"
-      style={{ minHeight: `${100 / weekDays.length}%` }}
+    <Accordion.Accordion
+      isOpen={dayjs(day).isSame(dayjs(), "day")}
+      className="gap-2 pt-4 pr-4 pl-12 border-t-2 border-black/10"
+      style={{ minHeight: (height - top - bottom) / weekDays.length }}
     >
-      <View>
+      <Accordion.Header>
         <Text className="text-4xl font-barlow-900 uppercase">
           {dayjs(day).format(weekDayFormatter)}
         </Text>
         <Text className="font-barlow-400 text-gray-600">
-          {dayjs(day).format(localFormatter)} - 24C
+          {dayjs(day).format(localFormatter)} - 24°C
         </Text>
-      </View>
-
-      <Todos day={day} />
-    </View>
+      </Accordion.Header>
+      <Accordion.Expanded>
+        <Todos day={day} />
+      </Accordion.Expanded>
+    </Accordion.Accordion>
   );
 }
