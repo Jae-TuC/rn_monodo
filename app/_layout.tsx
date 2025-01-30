@@ -1,4 +1,5 @@
 import "@/utils/cssintorop";
+import "../global.css";
 
 import {
   DarkTheme,
@@ -18,8 +19,10 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
-import "../global.css";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useLocalMigration } from "@/hooks/useLocalMigration";
+
+import { SQLiteProvider } from "expo-sqlite";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,7 +36,7 @@ export default function RootLayout() {
     Barlow_700Bold: Barlow_700Bold,
     Barlow_900Black: Barlow_900Black,
   });
-
+  useLocalMigration();
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -46,11 +49,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <SQLiteProvider databaseName="db">
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </SQLiteProvider>
     </ThemeProvider>
   );
 }

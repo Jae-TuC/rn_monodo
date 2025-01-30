@@ -1,9 +1,10 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Todo as TodoProps } from "@/utils/todo";
+// import { Todo as TodoProps } from "@/utils/todo";
 import { Check } from "lucide-react-native";
+import { TodoPros } from "@/db/schema";
 
-export default function Todo({ todo }: { todo: TodoProps }) {
+export default function Todo({ todo }: { todo: TodoPros }) {
   return (
     <View className="flex-row gap-2 items-center">
       <View

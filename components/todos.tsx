@@ -1,11 +1,32 @@
 import React, { useState } from "react";
 import { _todos } from "@/utils/todo";
 import Todo from "./todo";
+import { useLiveQuery, drizzle } from "drizzle-orm/expo-sqlite";
 import { Stagger } from "@animatereactnative/stagger";
 import { Button, View } from "react-native";
+import { db } from "@/db/init";
+import dayjs from "dayjs";
+import { todos } from "@/db/schema";
+import { between } from "drizzle-orm";
 
 export default function Todos({ day }: { day: string }) {
-  const [todos, setTodos] = useState(_todos);
+  const [todosLocal, setTodos] = useState(_todos);
+
+  const { data } = useLiveQuery(
+    db
+      .select()
+      .from(todos)
+      .where(
+        between(
+          todos.date,
+          dayjs().startOf("month").toDate(),
+          dayjs().endOf("month").toDate()
+        )
+      )
+      .orderBy(todos.createdAt)
+  );
+
+  console.log(data);
   return (
     <View>
       <Stagger
@@ -14,21 +35,27 @@ export default function Todos({ day }: { day: string }) {
         exitDirection={1}
         enterDirection={-1}
       >
-        {todos.map((todo, index) => (
-          <Todo key={`todo-${todo.id.toString() + index}`} todo={todo} />
+        {data.map((todo, index) => (
+          <Todo key={todo.id} todo={todo} />
         ))}
       </Stagger>
       <Button
         title="Add Todo"
         onPress={() => {
-          setTodos([
-            ...todos,
-            {
-              id: todos.length + 1,
-              content: `Todo ${todos.length + 1}`,
-              done: false,
-            },
-          ]);
+          db.insert(todos)
+            .values({
+              date: dayjs(day).toDate(),
+              content: `Todo ${todosLocal.length + 1}`,
+            })
+            .run();
+          // setTodos([
+          //   ...todos,
+          //   {
+          //     id: todos.length + 1,
+          //     content: `Todo ${todos.length + 1}`,
+          //     done: false,
+          //   },
+          // ]);
         }}
       />
     </View>
