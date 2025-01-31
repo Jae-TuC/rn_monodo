@@ -12,7 +12,7 @@ export default function Todo({ todo }: { todo: TodoPros }) {
           todo.done ? "bg-selected border-selected" : "bg-transparent bg0-black"
         }`}
       >
-        {todo && (
+        {Boolean(todo.done) && (
           <Check className="stroke-white" absoluteStrokeWidth size={16} />
         )}
       </View>

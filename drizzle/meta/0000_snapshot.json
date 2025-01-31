@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6d53b0aa-a33c-478b-aa8d-8a08f7ecc71d",
+  "id": "9e179612-78eb-4f97-b93b-0f84a4b27be3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "todos": {
@@ -14,20 +14,6 @@
           "notNull": true,
           "autoincrement": true
         },
-        "content": {
-          "name": "content",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "data": {
-          "name": "data",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "decription": {
           "name": "decription",
           "type": "text",
@@ -35,6 +21,28 @@
           "notNull": false,
           "autoincrement": false,
           "default": "''"
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "date": {
+          "name": "date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "done": {
+          "name": "done",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
         "createdAt": {
           "name": "createdAt",

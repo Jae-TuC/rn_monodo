@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { _todos } from "@/utils/todo";
 import Todo from "./todo";
 import { useLiveQuery, drizzle } from "drizzle-orm/expo-sqlite";
@@ -26,7 +26,6 @@ export default function Todos({ day }: { day: string }) {
       .orderBy(todos.createdAt)
   );
 
-  console.log(data);
   return (
     <View>
       <Stagger
@@ -35,27 +34,20 @@ export default function Todos({ day }: { day: string }) {
         exitDirection={1}
         enterDirection={-1}
       >
-        {data.map((todo, index) => (
+        {data?.map((todo, index) => (
           <Todo key={todo.id} todo={todo} />
         ))}
       </Stagger>
       <Button
         title="Add Todo"
         onPress={() => {
+          // console.log("hi data");
           db.insert(todos)
             .values({
               date: dayjs(day).toDate(),
               content: `Todo ${todosLocal.length + 1}`,
             })
             .run();
-          // setTodos([
-          //   ...todos,
-          //   {
-          //     id: todos.length + 1,
-          //     content: `Todo ${todos.length + 1}`,
-          //     done: false,
-          //   },
-          // ]);
         }}
       />
     </View>

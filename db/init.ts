@@ -9,7 +9,7 @@ const dbPath =
     : defaultDatabaseDirectory;
 
 // Create a single database instance
-const expodb = openDatabaseSync(
+const sqlite = openDatabaseSync(
   "db.db",
   {
     enableChangeListener: true,
@@ -17,11 +17,5 @@ const expodb = openDatabaseSync(
   dbPath
 );
 
-// Export the raw database for Drizzle Studio
-export const sqliteDb = () => expodb;
-
-// Export the Drizzle instance
-export const db = drizzle(expodb, { logger: false });
-
-// const expodb = openDatabaseSync("db.db");
-// const db = drizzle(expodb);
+export const sqliteDb = () => sqlite;
+export const db = drizzle(sqlite, { logger: false });
