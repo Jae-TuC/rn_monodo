@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { _todos } from "@/utils/todo";
 import Todo from "./todo";
 import { useLiveQuery, drizzle } from "drizzle-orm/expo-sqlite";
@@ -8,11 +8,17 @@ import { db } from "@/db/init";
 import dayjs from "dayjs";
 import { todos } from "@/db/schema";
 import { between } from "drizzle-orm";
-import Animated, { FadeIn, FadeOutDown } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeOutDown,
+  LinearTransition,
+} from "react-native-reanimated";
+import { localFormatter, weekDayFormatter } from "@/utils/constant";
 
 export default function Todos({ day }: { day: string }) {
   const [todosLocal, setTodos] = useState(_todos);
-
+  const [content, setContent] = useState("");
+  const inputRef = useRef<TextInput>(null);
   // useEffect(() => {
   //   const deleteTodos = async () => {
   //     await db.delete(todos);
@@ -35,6 +41,24 @@ export default function Todos({ day }: { day: string }) {
     [day]
   );
 
+  const addTodo = () => {
+    inputRef.current?.clear();
+    inputRef.current?.blur();
+    // console.log("hi data");
+    db.insert(todos)
+      .values({
+        date: dayjs(day).toDate(),
+        content,
+      })
+      .run();
+
+    setContent("");
+  };
+
+  const isDisabled = !content || content !== "";
+  console.log(data);
+
+  // console.log(data);
   return (
     <View>
       <Stagger
@@ -51,25 +75,23 @@ export default function Todos({ day }: { day: string }) {
         )}
       </Stagger>
       <Animated.View
-        entering={FadeIn.duration(400)}
-        exiting={FadeOutDown.duration(400)}
+        entering={FadeIn.duration(400).delay(400)}
+        exiting={FadeOutDown.duration(400).delay(400)}
+        layout={LinearTransition.duration(400)}
       >
         <TextInput
+          value={content}
+          ref={inputRef}
+          onSubmitEditing={() => {
+            if (isDisabled) {
+              addTodo();
+            }
+          }}
+          onChangeText={(text) => setContent(text)}
           className="border border-black/30 rounded-md p-2"
           placeholder="Add Todo"
         />
-        <Button
-          title="Add Todo"
-          onPress={() => {
-            // console.log("hi data");
-            db.insert(todos)
-              .values({
-                date: dayjs(day).toDate(),
-                content: `Todo ${todosLocal.length + 1}`,
-              })
-              .run();
-          }}
-        />
+        <Button disabled={isDisabled} title="Add Todo" onPress={addTodo} />
       </Animated.View>
     </View>
   );

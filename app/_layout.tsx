@@ -23,7 +23,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useLocalMigration } from "@/hooks/useLocalMigration";
 
 import { SQLiteProvider } from "expo-sqlite";
-import { sqliteDb } from "@/db/init";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

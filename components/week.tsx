@@ -3,7 +3,7 @@ import React from "react";
 import { weekDays } from "@/utils/constant";
 import Day from "./day";
 
-export function Week() {
+export default function Week() {
   return (
     <ScrollView>
       <View className="">
