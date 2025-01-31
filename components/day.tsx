@@ -1,8 +1,8 @@
-import { View, Text, useWindowDimensions } from "react-native";
+import { Text, useWindowDimensions } from "react-native";
 import React from "react";
 import { localFormatter, weekDayFormatter, weekDays } from "@/utils/constant";
 import dayjs from "dayjs";
-import Todos from "./todos";
+import Todos from "./Todos";
 import { Accordion } from "@animatereactnative/accordion";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 

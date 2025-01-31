@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { _todos } from "@/utils/todo";
-import Todo from "./todo";
-import { useLiveQuery, drizzle } from "drizzle-orm/expo-sqlite";
+import Todo from "@/components/Todo";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { Stagger } from "@animatereactnative/stagger";
-import { Button, Text, TextInput, View } from "react-native";
+import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { db } from "@/db/init";
 import dayjs from "dayjs";
 import { todos } from "@/db/schema";
@@ -13,15 +13,18 @@ import Animated, {
   FadeOutDown,
   LinearTransition,
 } from "react-native-reanimated";
-import { localFormatter, weekDayFormatter } from "@/utils/constant";
+import { Plus } from "lucide-react-native";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export default function Todos({ day }: { day: string }) {
   const [todosLocal, setTodos] = useState(_todos);
   const [content, setContent] = useState("");
   const inputRef = useRef<TextInput>(null);
+
   // useEffect(() => {
   //   const deleteTodos = async () => {
-  //     await db.delete(todos);
+  //     await db.delete(todos).all();
   //   };
   //   deleteTodos();
   // }, []);
@@ -33,12 +36,11 @@ export default function Todos({ day }: { day: string }) {
       .where(
         between(
           todos.date,
-          dayjs().startOf("month").toDate(),
-          dayjs().endOf("month").toDate()
+          dayjs(day).startOf("day").toDate(),
+          dayjs(day).endOf("day").toDate()
         )
       )
-      .orderBy(todos.createdAt),
-    [day]
+      .orderBy(todos.createdAt)
   );
 
   const addTodo = () => {
@@ -48,24 +50,21 @@ export default function Todos({ day }: { day: string }) {
     db.insert(todos)
       .values({
         date: dayjs(day).toDate(),
-        content,
+        content: content,
       })
       .run();
 
     setContent("");
   };
 
-  const isDisabled = !content || content !== "";
-  console.log(data);
-
-  // console.log(data);
+  const isDisabled = !content || content === "";
   return (
-    <View>
+    <View className="gap-2">
       <Stagger
         // @ts-ignore
         className="gap-2 mb-4 mt-2"
         exitDirection={1}
-        // enterDirection={-1}
+        enterDirection={-1}
       >
         {data?.map((todo, index) => (
           <Todo key={todo.id} todo={todo} />
@@ -78,20 +77,33 @@ export default function Todos({ day }: { day: string }) {
         entering={FadeIn.duration(400).delay(400)}
         exiting={FadeOutDown.duration(400).delay(400)}
         layout={LinearTransition.duration(400)}
+        className="gap-2 flex-row mb-4 items-end"
       >
         <TextInput
-          value={content}
+          defaultValue={content}
           ref={inputRef}
+          submitBehavior="blurAndSubmit"
+          multiline
           onSubmitEditing={() => {
-            if (isDisabled) {
+            if (!isDisabled) {
               addTodo();
             }
           }}
-          onChangeText={(text) => setContent(text)}
-          className="border border-black/30 rounded-md p-2"
-          placeholder="Add Todo"
+          onChangeText={(text) => setContent(text.trim())}
+          className="flex-1 border-b border-black/50 rounded-md p-2 font-barlow-400 placeholder:text-gray-600"
+          placeholder="What needs to be done"
         />
-        <Button disabled={isDisabled} title="Add Todo" onPress={addTodo} />
+        <AnimatedPressable
+          layout={LinearTransition.duration(400)}
+          disabled={isDisabled}
+          onPress={addTodo}
+          style={{ opacity: isDisabled ? 0.5 : 1 }}
+        >
+          <View className="bg-black/30 px-2 py-1 rounded-lg flex-row gap-1 items-center justify-center">
+            <Plus size={16} className="stroke-white" />
+            <Text className="font-barlow-500 color-white">Add</Text>
+          </View>
+        </AnimatedPressable>
       </Animated.View>
     </View>
   );

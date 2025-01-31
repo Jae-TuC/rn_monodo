@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { weekDays } from "@/utils/constant";
-import Day from "./day";
+import Day from "@/components/Day";
 
 export default function Week() {
   return (

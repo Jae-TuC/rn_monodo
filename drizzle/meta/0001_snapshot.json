@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "81e01062-c005-4c8d-a590-38ab8b0652b0",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d743fe68-b3f5-4276-97bc-eb5c88c84159",
+  "prevId": "81e01062-c005-4c8d-a590-38ab8b0652b0",
   "tables": {
     "todos": {
       "name": "todos",
@@ -44,8 +44,8 @@
           "autoincrement": false,
           "default": 0
         },
-        "created_at": {
-          "name": "created_at",
+        "createdAt": {
+          "name": "createdAt",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -65,7 +65,9 @@
   "_meta": {
     "schemas": {},
     "tables": {},
-    "columns": {}
+    "columns": {
+      "\"todos\".\"created_at\"": "\"todos\".\"createdAt\""
+    }
   },
   "internal": {
     "indexes": {}
