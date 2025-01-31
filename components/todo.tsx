@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { Check } from "lucide-react-native";
 import { TodoPros, todos } from "@/db/schema";
 import { db } from "@/db/init";
+import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated";
 
 export default function Todo({ todo }: { todo: TodoPros }) {
   return (
@@ -20,15 +21,23 @@ export default function Todo({ todo }: { todo: TodoPros }) {
     >
       <View
         className={`w-4 h-4 border rounded-sm items-center justify-center ${
-          todo.done ? "bg-selected border-selected" : "bg-transparent bg0-black"
-        }`}
+          todo.done
+            ? "bg-selected border-selected"
+            : "bg-transparent border-black"
+        } transition duration-300`}
       >
         {Boolean(todo.done) && (
-          <Check className="stroke-white" absoluteStrokeWidth size={16} />
+          <Animated.View
+            // 'strict'
+            entering={ZoomIn.springify().duration(200)}
+            exiting={ZoomOut.springify().duration(200)}
+          >
+            <Check className="stroke-white" absoluteStrokeWidth size={16} />
+          </Animated.View>
         )}
       </View>
       <Text
-        className={`font-barlow-400 ${
+        className={`font-barlow-400 flex-shrink ${
           Boolean(todo.done) ? "line-through decoration-selected" : ""
         }`}
       >
