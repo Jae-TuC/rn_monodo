@@ -14,6 +14,7 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { Plus } from "lucide-react-native";
+import { hitSlop } from "@/utils/misc";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -98,9 +99,10 @@ export default function Todos({ day }: { day: string }) {
           layout={LinearTransition.duration(400)}
           disabled={isDisabled}
           onPress={addTodo}
+          hitSlop={hitSlop}
           style={{ opacity: isDisabled ? 0.5 : 1 }}
         >
-          <View className="bg-black/30 px-2 py-1 rounded-lg flex-row gap-1 items-center justify-center">
+          <View className="bg-black/30 px-1.5 py-0.5 rounded-lg flex-row gap-0.5 items-center justify-center">
             <Plus size={16} className="stroke-white" />
             <Text className="font-barlow-500 color-white">Add</Text>
           </View>

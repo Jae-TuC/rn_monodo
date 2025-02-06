@@ -23,6 +23,8 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { useLocalMigration } from "@/hooks/useLocalMigration";
 
 import { SQLiteProvider } from "expo-sqlite";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/utils/queryClient";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -54,10 +56,12 @@ export default function RootLayout() {
       useSuspense
     >
       <ThemeProvider value={colorScheme === "light" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+        <QueryClientProvider client={queryClient}>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </QueryClientProvider>
         <StatusBar style="auto" />
       </ThemeProvider>
     </SQLiteProvider>

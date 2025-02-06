@@ -16,10 +16,11 @@ import { observer } from "@legendapp/state/react";
 export const Day = observer(({ day }: { day: string }) => {
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
+  const isCurrent = dayjs(day).isSame(dayjs(currentDay.get()), "day");
 
   return (
     <Accordion.Accordion
-      isOpen={dayjs(day).isSame(dayjs(), "day")}
+      isOpen={isCurrent}
       className="gap-2 pt-4 pr-4 pl-12 bg-transparent"
       style={{
         minHeight: (height - top - bottom) / weekDays.length,
