@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { weekDays } from "@/utils/constant";
-import Day from "@/components/Day";
+import { Day } from "@/components/Day";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Week() {

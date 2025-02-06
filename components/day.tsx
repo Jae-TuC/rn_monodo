@@ -10,8 +10,10 @@ import dayjs from "dayjs";
 import Todos from "./Todos";
 import { Accordion } from "@animatereactnative/accordion";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { currentDay } from "@legendapp/state/helpers/time";
+import { observer } from "@legendapp/state/react";
 
-export default function Day({ day }: { day: string }) {
+export const Day = observer(({ day }: { day: string }) => {
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
 
@@ -43,4 +45,4 @@ export default function Day({ day }: { day: string }) {
       </Accordion.Expanded>
     </Accordion.Accordion>
   );
-}
+});
