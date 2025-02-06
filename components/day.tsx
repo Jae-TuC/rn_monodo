@@ -13,17 +13,19 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Day({ day }: { day: string }) {
   const { height } = useWindowDimensions();
-  const { bottom } = useSafeAreaInsets();
+  const { bottom, top } = useSafeAreaInsets();
 
   return (
     <Accordion.Accordion
       isOpen={dayjs(day).isSame(dayjs(), "day")}
       className="gap-2 pt-4 pr-4 pl-12 bg-transparent"
       style={{
-        minHeight: (height - bottom) / weekDays.length,
-        experimental_backgroundImage: `linear-gradient(to bottom, ${
-          weekDayColors[dayjs(day).weekday()]
-        }, rgba(0,0,0,.1))`,
+        minHeight: (height - top - bottom) / weekDays.length,
+        // @ts-ignore
+        backgroundColor: weekDayColors[dayjs(day).weekday()],
+        // experimental_backgroundImage: `linear-gradient(to bottom, ${
+        //   weekDayColors[dayjs(day).weekday()]
+        // }, rgba(0,0,0,.1))`,
       }}
     >
       <Accordion.Header>

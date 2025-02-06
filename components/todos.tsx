@@ -58,6 +58,7 @@ export default function Todos({ day }: { day: string }) {
   };
 
   const isDisabled = !content || content === "";
+
   return (
     <View className="gap-2">
       <Stagger
